@@ -1,0 +1,319 @@
+
+{
+  "swagger": "2.0",
+  "info": {
+      "title": "Cat",
+      "version": "1.0.0",
+      "description": "Cat API Documentation",
+      "license": {
+        "name": "MIT"
+      }
+  },
+  "host": "localhost:5000/api",
+  "schemes": ["http", "https"],
+  "tags": [
+    {
+      "name": "Cats",
+      "description": "API for Cat"
+    },
+    {
+      "name": "Auths",
+      "description": "API for Athentication"
+    }
+  ],
+  "definitions": {
+    "id": {
+      "properties": {
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "Cat": {
+      "type": "object",
+      "properties": {
+        "name":{
+          "type": "string"
+        },
+        "age": {
+          "type": "integer"
+        }
+      }
+    },
+    "Cats":{
+      "type": "object",
+      "properties": {
+        "cats":{
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Cat"
+          }
+        }
+      }
+    },
+    "Auth": {
+      "type": "object",
+      "properties": {
+        "username":{
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "type":{
+          "type": "number"
+        }
+      }
+    },
+    "Log": {
+      "type": "object",
+      "properties": {
+        "username":{
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthRefreshToken": {
+      "type": "object",
+      "properties": {
+        "username":{
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/cat": {
+      "get": {
+        "tags": ["Cats"],
+        
+        "summary": "Get all cats",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Cats"
+            }
+            
+          },
+          "401":{
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Cats"],
+        "summary": "Create new cat",
+        "security": [
+          {"Bearer": []}
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "name",
+            "description": "Name",
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "age",
+            "description": "Age",
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "fileName",
+            "description": "File Name",
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "files",
+            "description": "File",
+            "type": "file"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400":{
+            "description": "Wrong parameters"
+          }
+        }
+      }
+    },
+    "/auth/login":{
+      "post": {
+        "tags": ["Auths"],
+        "summary": "Login",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Login",
+            "schema": {
+              "$ref": "#/definitions/Log"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400":{
+            "description": "Wrong parameters"
+          }
+        }
+      }
+    },
+    "/cat/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Id for cat",
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "tags": ["Cats"],
+        "security": [
+          {"Bearer": []}
+        ],
+        "summary": "Delete a cat",
+        "responses": {
+          "200": {
+            "description": "OK" 
+          },
+          "401":{
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Cats"],
+        "security": [
+          {"Bearer": []}
+        ],
+        "summary": "Get a cat",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Cats"
+            }
+            
+          },
+          "401":{
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Cats"],
+        "security": [
+          {"Bearer": []}
+        ],
+        "summary": "Update a cat",
+        "parameters": [
+          {
+            "in":"body",
+            "name":"body",
+            "required":true,
+            "description": "Update a cat",
+            "schema": {
+              "$ref":"#/definitions/Cat"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Cat"
+            }
+            
+          },
+          "401":{
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/register":{
+      "post": {
+        "tags": ["Auths"],
+        "summary": "Register",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Register",
+            "schema": {
+              "$ref": "#/definitions/Auth"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400":{
+            "description": "Wrong parameters"
+          }
+        }
+      }
+    },
+    "/auth/refresh":{
+      "post": {
+        "tags": ["Auths"],
+        "summary": "Refresh Token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Refresh Token",
+            "schema": {
+              "$ref": "#/definitions/AuthRefreshToken"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400":{
+            "description": "Wrong parameters"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer":{
+      "type": "apiKey",
+      "bearerFormat": "JWT",
+      "in": "header",
+      "description": "Enter the token with the `Bearer: ` prefix, e.g. Bearer abcde1234",
+      "name": "Authorization"
+    }
+  }
+}

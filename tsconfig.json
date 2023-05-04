@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": "./src",
+     "paths": {
+      "@app/*": ["./*"],
+      "@common/*": ["common/*"],
+     },
+      "plugins": [
+        { "transform": "typescript-transform-paths" }
+      ],
+    "target": "es5",
+    "module": "ESNext",
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,    
+    "incremental": true,
+    "declaration": true,
+    "noEmit": true,
+    "jsx": "react"
+  },
+  "ts-node": {
+    "esm": true,
+    "transpileOnly": true,
+    "swc": true,
+    "require": [ 
+     "typescript-transform-paths/register",
+     "tsconfig-paths/register"
+    ],
+    
+  },
+  "include": ["src/**/*.ts","./","src/*.ts"],
+  "exclude": ["node_modules"],
+}
